@@ -1,0 +1,19 @@
+plugins {
+    id 'java-library' // используется ЯП java
+}
+
+repositories {
+    mavenCentral()  // используется сторонняя библиотека mavenCentral()
+}
+
+dependencies {
+    testImplementation(
+            "com.codeborne:selenide:7.4.3",       // используется библиотека selenide из библиотеки mavenCentral()
+            "org.junit.jupiter:junit-jupiter:5.10.0",   // библиотека junit
+            'org.slf4j:slf4j-simple:2.0.7'   // Логгер для более подробного лога
+    )
+}
+
+test {
+    useJUnitPlatform()  //подключение библиотеки для запуска тестов (зеленый треугольник)
+}
