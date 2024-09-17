@@ -1,9 +1,13 @@
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.Selenide;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import static com.codeborne.selenide.Condition.exist;
-import static com.codeborne.selenide.Condition.text;
+import java.time.Duration;
+
+import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
 
 public class GitHubTests {
@@ -23,11 +27,22 @@ public class GitHubTests {
 
         actions().moveToElement($("#wiki-tab")).click().perform();
 
-        $$("#wiki-body ul").findBy(text("Soft assertions")).should(exist);
+        $(".markdown-body").shouldHave(text("Soft assertions"));
 
-        $("#wiki-body ul:nth-child(3) li:nth-child(8) a").click();
+        $(byText("Soft assertions")).click();
 
-        $$("#wiki-body div:nth-child(18) h4").findBy(text("Using JUnit5 extend test class:")).should(exist);
-
+        $(".markdown-body").shouldHave(text("""
+                @ExtendWith({SoftAssertsExtension.class})
+                class Tests {
+                  @Test
+                  void test() {
+                    Configuration.assertionMode = SOFT;
+                    open("page.html");
+                
+                    $("#first").should(visible).click();
+                    $("#second").should(visible).click();
+                  }
+                }
+                """));
     }
 }
